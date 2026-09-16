@@ -64,6 +64,7 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-bottom: 4px;
+      cursor: pointer;
     }
 
     .sub-title {
@@ -90,11 +91,11 @@
     /* Views Framework */
     .step-view {
       display: none;
-      animation: fadeIn 0.35s ease-out forwards;
     }
 
     .step-view.active {
       display: block;
+      animation: fadeIn 0.35s ease-out forwards;
     }
 
     @keyframes fadeIn {
@@ -127,7 +128,7 @@
       background: #f8fafc;
       border: 2px solid var(--border);
       border-radius: var(--radius-md);
-      padding: 20px;
+      padding: 22px;
       cursor: pointer;
       transition: all 0.2s ease;
       text-align: center;
@@ -140,14 +141,14 @@
     }
 
     .mode-title {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 700;
       color: var(--primary);
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
 
     .mode-desc {
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       color: var(--text-muted);
     }
 
@@ -319,14 +320,14 @@
 
   <div class="app-card">
     <div class="header">
-      <div class="logo">FIND YOUR IDOL</div>
+      <div class="logo" onclick="resetApp()">FIND YOUR IDOL</div>
       <div class="sub-title">AI 알고리즘 기반 최애 찾기 서비스</div>
       <div class="progress-bar-bg">
         <div class="progress-bar-fill" id="progressBar"></div>
       </div>
     </div>
 
-    <!-- STEP 0: 추천 대상 선택 (그룹 vs 아티스트 개인) -->
+    <!-- STEP 0: 메인 추천 모드 선택 -->
     <div class="step-view active" id="step0">
       <div class="question">어떤 추천을 받고 싶으신가요?</div>
       <div class="question-desc">원하는 추천 모드를 먼저 선택해 주세요.</div>
@@ -345,7 +346,7 @@
     <!-- STEP 1: 성별 선택 -->
     <div class="step-view" id="step1">
       <div class="question">선호하는 아이돌 성별은?</div>
-      <div class="question-desc">분석에 반영할 아이돌 그룹/멤버의 성별입니다.</div>
+      <div class="question-desc">분석에 반영할 아이돌의 성별입니다.</div>
       <div class="options-grid" id="genderOptions"></div>
     </div>
 
@@ -359,7 +360,7 @@
     <!-- STEP 3: 음악 스타일 선택 -->
     <div class="step-view" id="step3">
       <div class="question">즐겨 듣는 음악 스타일은?</div>
-      <div class="question-desc">대표 곡의 플레이리스트 스타일에 가깝게 골라주세요.</div>
+      <div class="question-desc">플레이리스트 스타일에 가깝게 골라주세요.</div>
       <div class="options-grid" id="songOptions"></div>
     </div>
 
@@ -370,14 +371,14 @@
       <div class="options-grid" id="lookOptions"></div>
     </div>
 
-    <!-- STEP 4/5: AI 후보 매칭 카드 선택 -->
+    <!-- STEP_CANDIDATES: AI 후보 매칭 카드 선택 -->
     <div class="step-view" id="step_candidates">
       <div class="question">AI가 추천하는 TOP 4 후보</div>
       <div class="question-desc">가장 마음에 드는 항목을 1개 선택하세요.</div>
       <div class="candidate-grid" id="candidateList"></div>
     </div>
 
-    <!-- STEP RESULT: AI 결과 화면 -->
+    <!-- STEP_RESULT: AI 결과 화면 -->
     <div class="step-view" id="step_result">
       <div class="ai-loading" id="aiLoading">
         <div class="pulse-ring"></div>
@@ -398,10 +399,7 @@
   </div>
 
   <script>
-    /* ==========================================
-       2. Clean SVG/High-Res Reliable Visual Avatars
-       ========================================== */
-    // 프로필 고화질 시각 템플릿 generator (이미지 깨짐/이상한 얼굴 방지)
+    /* 프로필 고화질 SVG 그래픽 생성 함수 */
     function makeAvatar(name, bg, fg) {
       const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160">
         <rect width="160" height="160" fill="${bg}"/>
@@ -412,9 +410,6 @@
       return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
     }
 
-    /* ==========================================
-       3. Major K-POP Database (30 Major Idol Groups & Solos)
-       ========================================== */
     const optionsData = {
       genders: ["여성", "남성", "상관없음"],
       concepts: ["청량·시원함", "걸크러시·힙합", "몽환·아련함", "유니크·키치", "다크·카리스마"],
@@ -422,7 +417,7 @@
       looks: ["강아지상 (친근함)", "고양이상 (시크함)", "토끼상 (귀여움)", "여우/공룡상 (매력파)"]
     };
 
-    // [그룹 데이터베이스]
+    // [그룹 DB]
     const groupDB = [
       { name: "NewJeans", gender: "여성", concept: "청량·시원함", song: "이지리스닝 (편안함)", img: makeAvatar("NewJeans", "#818cf8", "#312e81"), desc: "자연스러운 Y2K 감성과 편안한 이지리스닝의 대표주자" },
       { name: "IVE", gender: "여성", concept: "걸크러시·힙합", song: "트렌디 팝·R&B", img: makeAvatar("IVE", "#f472b6", "#831843"), desc: "당당한 자기애와 화려한 팝 사운드가 매력적인 그룹" },
@@ -431,7 +426,6 @@
       { name: "ILLIT", gender: "여성", concept: "청량·시원함", song: "이지리스닝 (편안함)", img: makeAvatar("ILLIT", "#fbcfe8", "#9d174d"), desc: "통통 튀는 엉뚱함과 중독성 넘치는 멜로디" },
       { name: "BLACKPINK", gender: "여성", concept: "걸크러시·힙합", song: "트렌디 팝·R&B", img: makeAvatar("BLACKPINK", "#f43f5e", "#111827"), desc: "전 세계를 매료시킨 클래스 다른 걸크러시와 스타일" },
       { name: "TWICE", gender: "여성", concept: "청량·시원함", song: "에너지틱·댄스 비트", img: makeAvatar("TWICE", "#fbbf24", "#78350f"), desc: "에너제틱하고 사랑스러운 에너지를 전하는 대표 걸그룹" },
-
       { name: "BTS", gender: "남성", concept: "다크·카리스마", song: "트렌디 팝·R&B", img: makeAvatar("BTS", "#c084fc", "#581c87"), desc: "진정성 있는 메시지와 글로벌 팝 트렌드를 이끄는 아티스트" },
       { name: "SEVENTEEN", gender: "남성", concept: "청량·시원함", song: "에너지틱·댄스 비트", img: makeAvatar("SEVENTEEN", "#93c5fd", "#1e3a8a"), desc: "자체 제작 아티스트다운 완벽한 칼군무와 청량한 에너지" },
       { name: "Stray Kids", gender: "남성", concept: "다크·카리스마", song: "에너지틱·댄스 비트", img: makeAvatar("Stray Kids", "#f87171", "#7f1d1d"), desc: "자체 프로듀싱 마라맛 사운드와 폭발적인 무대 연출" },
@@ -441,29 +435,25 @@
       { name: "ENHYPEN", gender: "남성", concept: "몽환·아련함", song: "에너지틱·댄스 비트", img: makeAvatar("ENHYPEN", "#94a3b8", "#0f172a"), desc: "다크 팬터지 세계관과 절제된 섹시 퍼포먼스" }
     ];
 
-    // [아티스트 개인 데이터베이스]
+    // [개인 DB]
     const soloDB = [
-      { name: "카리나", group: "aespa", gender: "여성", concept: "유니크·키치", song: "에너지틱·댄스 비트", look: "고양이상", img: makeAvatar("카리나", "#a78bfa", "#4c1d95"), desc: "비현실적인 비주얼과 압도적인 무대 지배력" },
-      { name: "민지", group: "NewJeans", gender: "여성", concept: "청량·시원함", song: "이지리스닝 (편안함)", look: "강아지상", img: makeAvatar("민지", "#818cf8", "#1e1b4b"), desc: "클래식한 고전미와 신뢰감을 주는 매력적인 중저음" },
-      { name: "장원영", group: "IVE", gender: "여성", concept: "걸크러시·힙합", song: "트렌디 팝·R&B", look: "토끼상", img: makeAvatar("장원영", "#f472b6", "#831843"), desc: "MZ세대의 워너비 아이콘이자 완성형 워너비 비주얼" },
-      { name: "사쿠라", group: "LE SSERAFIM", gender: "여성", concept: "다크·카리스마", song: "에너지틱·댄스 비트", look: "cat", img: makeAvatar("사쿠라", "#38bdf8", "#0c4a6e"), desc: "끊임없는 도전 정신과 단단한 내면의 프로페셔널" },
-      { name: "제니", group: "BLACKPINK", gender: "여성", concept: "걸크러시·힙합", song: "트렌디 팝·R&B", look: "고양이상", img: makeAvatar("제니", "#f43f5e", "#111827"), desc: "트렌드를 선도하는 아우라와 독보적인 힙한 매력" },
-      { name: "원희", group: "ILLIT", gender: "여성", concept: "청량·시원함", song: "이지리스닝 (편안함)", look: "토끼상", img: makeAvatar("원희", "#fbcfe8", "#9d174d"), desc: "사랑스러운 표정과 입덕을 부르는 만찢녀 매력" },
-      { name: "나연", group: "TWICE", gender: "여성", concept: "청량·시원함", song: "에너지틱·댄스 비트", look: "토끼상", img: makeAvatar("나연", "#fbbf24", "#78350f"), desc: "보기만 해도 기분 좋아지는 과즙미 넘치는 에너제틱 퀸" },
-
-      { name: "정국", group: "BTS", gender: "남성", concept: "다크·카리스마", song: "트렌디 팝·R&B", look: "강아지상", img: makeAvatar("정국", "#c084fc", "#581c87"), desc: "보컬·댄스·비주얼 삼박자를 모두 갖춘 황금 올라운더" },
-      { name: "뷔", group: "BTS", gender: "남성", concept: "몽환·아련함", song: "감성·발라드", look: "여우/공룡상", img: makeAvatar("뷔", "#a855f7", "#3b0764"), desc: "영화 속 한 장면 같은 보컬 톤과 압도적 명화 비주얼" },
-      { name: "차은우", group: "ASTRO", gender: "남성", concept: "청량·시원함", song: "감성·발라드", look: "강아지상", img: makeAvatar("차은우", "#38bdf8", "#0369a1"), desc: "남녀노소 인정하는 조각 같은 최강의 청정 비주얼" },
-      { name: "현진", group: "Stray Kids", gender: "남성", concept: "다크·카리스마", song: "에너지틱·댄스 비트", look: "여우/공룡상", img: makeAvatar("현진", "#f87171", "#7f1d1d"), desc: "매 무대마다 소름 돋는 몰입감을 선사하는 퍼포머" },
-      { name: "연준", group: "TXT", gender: "남성", concept: "유니크·키치", song: "트렌디 팝·R&B", look: "여우/공룡상", img: makeAvatar("연준", "#60a5fa", "#1d4ed8"), desc: "어떤 핏도 완벽하게 소화하는 4세대 잇보이(It Boy)" },
-      { name: "원빈", group: "RIIZE", gender: "남성", concept: "청량·시원함", song: "이지리스닝 (편안함)", look: "고양이상", img: makeAvatar("원빈", "#fb923c", "#7c2d12"), desc: "단번에 시선을 사로잡는 분위기 미남과 무대 몰입도" },
-      { name: "성한빈", group: "ZEROBASEONE", gender: "남성", concept: "청량·시원함", song: "이지리스닝 (편안함)", look: "강아지상", img: makeAvatar("성한빈", "#38bdf8", "#164e63"), desc: "정석적인 잘생김과 다정하고 올바른 태도의 든든한 리더" }
+      { name: "카리나", group: "aespa", gender: "여성", concept: "유니크·키치", song: "에너지틱·댄스 비트", look: "고양이상 (시크함)", img: makeAvatar("카리나", "#a78bfa", "#4c1d95"), desc: "비현실적인 비주얼과 압도적인 무대 지배력" },
+      { name: "민지", group: "NewJeans", gender: "여성", concept: "청량·시원함", song: "이지리스닝 (편안함)", look: "강아지상 (친근함)", img: makeAvatar("민지", "#818cf8", "#1e1b4b"), desc: "클래식한 고전미와 신뢰감을 주는 매력적인 중저음" },
+      { name: "장원영", group: "IVE", gender: "여성", concept: "걸크러시·힙합", song: "트렌디 팝·R&B", look: "토끼상 (귀여움)", img: makeAvatar("장원영", "#f472b6", "#831843"), desc: "MZ세대의 워너비 아이콘이자 완성형 비주얼" },
+      { name: "사쿠라", group: "LE SSERAFIM", gender: "여성", concept: "다크·카리스마", song: "에너지틱·댄스 비트", look: "고양이상 (시크함)", img: makeAvatar("사쿠라", "#38bdf8", "#0c4a6e"), desc: "끊임없는 도전 정신과 단단한 내면의 프로페셔널" },
+      { name: "제니", group: "BLACKPINK", gender: "여성", concept: "걸크러시·힙합", song: "트렌디 팝·R&B", look: "고양이상 (시크함)", img: makeAvatar("제니", "#f43f5e", "#111827"), desc: "트렌드를 선도하는 아우라와 독보적인 힙한 매력" },
+      { name: "원희", group: "ILLIT", gender: "여성", concept: "청량·시원함", song: "이지리스닝 (편안함)", look: "토끼상 (귀여움)", img: makeAvatar("원희", "#fbcfe8", "#9d174d"), desc: "사랑스러운 표정과 입덕을 부르는 만찢녀 매력" },
+      { name: "나연", group: "TWICE", gender: "여성", concept: "청량·시원함", song: "에너지틱·댄스 비트", look: "토끼상 (귀여움)", img: makeAvatar("나연", "#fbbf24", "#78350f"), desc: "보기만 해도 기분 좋아지는 과즙미 넘치는 에너제틱 퀸" },
+      { name: "정국", group: "BTS", gender: "남성", concept: "다크·카리스마", song: "트렌디 팝·R&B", look: "강아지상 (친근함)", img: makeAvatar("정국", "#c084fc", "#581c87"), desc: "보컬·댄스·비주얼 삼박자를 모두 갖춘 황금 올라운더" },
+      { name: "뷔", group: "BTS", gender: "남성", concept: "몽환·아련함", song: "감성·발라드", look: "여우/공룡상 (매력파)", img: makeAvatar("뷔", "#a855f7", "#3b0764"), desc: "영화 속 한 장면 같은 보컬 톤과 압도적 명화 비주얼" },
+      { name: "차은우", group: "ASTRO", gender: "남성", concept: "청량·시원함", song: "감성·발라드", look: "강아지상 (친근함)", img: makeAvatar("차은우", "#38bdf8", "#0369a1"), desc: "남녀노소 인정하는 조각 같은 최강의 청정 비주얼" },
+      { name: "현진", group: "Stray Kids", gender: "남성", concept: "다크·카리스마", song: "에너지틱·댄스 비트", look: "여우/공룡상 (매력파)", img: makeAvatar("현진", "#f87171", "#7f1d1d"), desc: "매 무대마다 소름 돋는 몰입감을 선사하는 퍼포머" },
+      { name: "연준", group: "TXT", gender: "남성", concept: "유니크·키치", song: "트렌디 팝·R&B", look: "여우/공룡상 (매력파)", img: makeAvatar("연준", "#60a5fa", "#1d4ed8"), desc: "어떤 핏도 완벽하게 소화하는 4세대 잇보이(It Boy)" },
+      { name: "원빈", group: "RIIZE", gender: "남성", concept: "청량·시원함", song: "이지리스닝 (편안함)", look: "고양이상 (시크함)", img: makeAvatar("원빈", "#fb923c", "#7c2d12"), desc: "단번에 시선을 사로잡는 분위기 미남과 무대 몰입도" },
+      { name: "성한빈", group: "ZEROBASEONE", gender: "남성", concept: "청량·시원함", song: "이지리스닝 (편안함)", look: "강아지상 (친근함)", img: makeAvatar("성한빈", "#38bdf8", "#164e63"), desc: "정석적인 잘생김과 다정하고 올바른 태도의 든든한 리더" }
     ];
 
-    /* ==========================================
-       4. Navigation Logic
-       ========================================== */
-    let targetMode = ""; // 'group' or 'solo'
+    let targetMode = "";
     let currentStepIndex = 0;
     let userProfile = {};
 
@@ -471,7 +461,6 @@
       targetMode = mode;
       userProfile = {};
       
-      // 스텝 옵션 렌더링
       renderOptions('genderOptions', optionsData.genders, 'gender');
       renderOptions('conceptOptions', optionsData.concepts, 'concept');
       renderOptions('songOptions', optionsData.songs, 'song');
@@ -528,31 +517,29 @@
     }
 
     function updateProgress() {
-      const maxSteps = targetMode === 'solo' ? 6 : 5;
+      if (currentStepIndex === 0) {
+        document.getElementById('progressBar').style.width = '0%';
+        return;
+      }
+      const maxSteps = targetMode === 'solo' ? 5 : 4;
       const pct = (currentStepIndex / maxSteps) * 100;
-      document.getElementById('progressBar').style.width = `${pct}%`;
+      document.getElementById('progressBar').style.width = `${Math.min(pct, 100)}%`;
     }
 
-    /* ==========================================
-       5. Recommendation Engine (Cosine Weight Matching)
-       ========================================== */
     function calculateCandidates() {
       const dataset = targetMode === 'group' ? groupDB : soloDB;
       
-      // 성별 필터링
       let filtered = dataset;
       if (userProfile.gender !== "상관없음") {
         filtered = dataset.filter(item => item.gender === userProfile.gender);
       }
 
-      // 점수 가중치 산출
       const scored = filtered.map(item => {
         let score = 0;
         if (item.concept === userProfile.concept) score += 40;
         if (item.song === userProfile.song) score += 40;
         if (targetMode === 'solo' && item.look === userProfile.look) score += 20;
 
-        // 동점 시 미세 랜더링 변화
         score += Math.random() * 5;
         return { ...item, matchScore: score };
       });
@@ -560,7 +547,6 @@
       scored.sort((a, b) => b.matchScore - a.matchScore);
       const top4 = scored.slice(0, 4);
 
-      // STEP TOP 4 렌더링
       const list = document.getElementById('candidateList');
       list.innerHTML = "";
       top4.forEach(item => {
@@ -592,8 +578,7 @@
 
         const analysisText = `
           <strong>[AI 맞춤 분석 보고서]</strong><br>
-          선택하신 <strong>'${userProfile.concept}'</strong> 컨셉과 <strong>'${userProfile.song}'</strong> 음악 성향을 바탕으로 유사도를 산출한 결과, 
-          가장 높은 취향 일치도를 기록한 대상을 도출했습니다.<br><br>
+          선택하신 <strong>'${userProfile.concept}'</strong> 컨셉과 <strong>'${userProfile.song}'</strong> 음악 성향을 바탕으로 분석한 결과, 가장 높은 취향 유사도를 기록했습니다.<br><br>
           ✨ <strong>특징:</strong> ${item.desc}
         `;
         document.getElementById('resultAnalysis').innerHTML = analysisText;
@@ -607,8 +592,11 @@
       document.getElementById('aiResult').style.display = 'none';
       document.getElementById('aiLoading').style.display = 'block';
       showStep('step0');
-      document.getElementById('progressBar').style.width = '0%';
+      updateProgress();
     }
+
+    // 초기화 시 Step 0(모드 선택)을 항상 활성화
+    window.onload = resetApp;
   </script>
 </body>
 </html>
