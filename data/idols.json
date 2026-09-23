@@ -1,0 +1,234 @@
+[
+  {
+    "id": "sample-1",
+    "name": "에이티즈",
+    "image": "",
+    "desc": "밝은 에너지로 분위기를 바꾸는 무대 위의 비타민.",
+    "scores": {
+      "concept": {
+        "lovely": 81,
+        "fresh": 41,
+        "powerful": 45,
+        "dark": 14,
+        "retro": 40
+      },
+      "song": {
+        "dance": 72,
+        "pop": 86,
+        "hiphop": 47,
+        "rnb": 20,
+        "ballad": 97
+      },
+      "look": {
+        "puppy": 62,
+        "cat": 56,
+        "warm": 65,
+        "sharp": 37,
+        "dreamy": 89
+      }
+    }
+  },
+  {
+    "id": "sample-2",
+    "name": "시안",
+    "image": "",
+    "desc": "차분한 카리스마와 깊은 눈빛이 매력적인 메인 보컬.",
+    "scores": {
+      "concept": {
+        "lovely": 77,
+        "fresh": 88,
+        "powerful": 37,
+        "dark": 85,
+        "retro": 84
+      },
+      "song": {
+        "dance": 51,
+        "pop": 76,
+        "hiphop": 73,
+        "rnb": 69,
+        "ballad": 40
+      },
+      "look": {
+        "puppy": 27,
+        "cat": 60,
+        "warm": 51,
+        "sharp": 13,
+        "dreamy": 80
+      }
+    }
+  },
+  {
+    "id": "sample-3",
+    "name": "이서",
+    "image": "",
+    "desc": "어떤 콘셉트도 자기 것으로 만드는 만능 퍼포머.",
+    "scores": {
+      "concept": {
+        "lovely": 79,
+        "fresh": 75,
+        "powerful": 43,
+        "dark": 24,
+        "retro": 74
+      },
+      "song": {
+        "dance": 27,
+        "pop": 79,
+        "hiphop": 25,
+        "rnb": 25,
+        "ballad": 85
+      },
+      "look": {
+        "puppy": 31,
+        "cat": 98,
+        "warm": 45,
+        "sharp": 92,
+        "dreamy": 80
+      }
+    }
+  },
+  {
+    "id": "sample-4",
+    "name": "노아",
+    "image": "",
+    "desc": "부드러운 음색과 다정한 미소가 돋보이는 멤버.",
+    "scores": {
+      "concept": {
+        "lovely": 14,
+        "fresh": 95,
+        "powerful": 100,
+        "dark": 53,
+        "retro": 63
+      },
+      "song": {
+        "dance": 85,
+        "pop": 21,
+        "hiphop": 48,
+        "rnb": 33,
+        "ballad": 69
+      },
+      "look": {
+        "puppy": 83,
+        "cat": 44,
+        "warm": 79,
+        "sharp": 71,
+        "dreamy": 59
+      }
+    }
+  },
+  {
+    "id": "sample-5",
+    "name": "리아",
+    "image": "",
+    "desc": "트렌디한 감각으로 시선을 사로잡는 비주얼 센터.",
+    "scores": {
+      "concept": {
+        "lovely": 39,
+        "fresh": 83,
+        "powerful": 54,
+        "dark": 55,
+        "retro": 15
+      },
+      "song": {
+        "dance": 16,
+        "pop": 73,
+        "hiphop": 32,
+        "rnb": 27,
+        "ballad": 59
+      },
+      "look": {
+        "puppy": 61,
+        "cat": 25,
+        "warm": 56,
+        "sharp": 83,
+        "dreamy": 83
+      }
+    }
+  },
+  {
+    "id": "sample-6",
+    "name": "도윤",
+    "image": "",
+    "desc": "리듬을 타는 랩과 강렬한 퍼포먼스가 강점.",
+    "scores": {
+      "concept": {
+        "lovely": 42,
+        "fresh": 43,
+        "powerful": 16,
+        "dark": 57,
+        "retro": 73
+      },
+      "song": {
+        "dance": 20,
+        "pop": 24,
+        "hiphop": 10,
+        "rnb": 83,
+        "ballad": 31
+      },
+      "look": {
+        "puppy": 19,
+        "cat": 92,
+        "warm": 39,
+        "sharp": 22,
+        "dreamy": 80
+      }
+    }
+  },
+  {
+    "id": "sample-7",
+    "name": "유나",
+    "image": "",
+    "desc": "청량한 목소리로 여름을 노래하는 막내.",
+    "scores": {
+      "concept": {
+        "lovely": 75,
+        "fresh": 69,
+        "powerful": 84,
+        "dark": 79,
+        "retro": 20
+      },
+      "song": {
+        "dance": 22,
+        "pop": 92,
+        "hiphop": 39,
+        "rnb": 99,
+        "ballad": 30
+      },
+      "look": {
+        "puppy": 59,
+        "cat": 36,
+        "warm": 38,
+        "sharp": 80,
+        "dreamy": 26
+      }
+    }
+  },
+  {
+    "id": "sample-8",
+    "name": "카이",
+    "image": "",
+    "desc": "몽환적인 분위기와 독특한 표현력을 가진 아티스트.",
+    "scores": {
+      "concept": {
+        "lovely": 44,
+        "fresh": 75,
+        "powerful": 69,
+        "dark": 80,
+        "retro": 13
+      },
+      "song": {
+        "dance": 54,
+        "pop": 13,
+        "hiphop": 33,
+        "rnb": 88,
+        "ballad": 44
+      },
+      "look": {
+        "puppy": 12,
+        "cat": 95,
+        "warm": 17,
+        "sharp": 70,
+        "dreamy": 72
+      }
+    }
+  }
+]
