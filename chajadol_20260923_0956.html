@@ -1,0 +1,2147 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>찾아돌 - 최애에 맞는 아이돌을 찾아드립니다</title>
+
+<!-- Google Fonts Import for K-Pop Aesthetics -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;600;700;900&family=Outfit:wght@600;800;900&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
+
+<style>
+/* ==========================================================================
+   [K-POP CYBER STAGE DESIGN SYSTEM]
+   - Primary Neon Pink: #ff007f
+   - Neon Purple: #8a2be2
+   - Electric Cyan: #00f0ff
+   - Neon Lime/Yellow: #ffee00
+   - Cyber Dark Background: #0b0716 / #130c25
+   ========================================================================== */
+
+:root {
+  --bg-dark: #0b0716;
+  --bg-card: rgba(22, 14, 42, 0.75);
+  --bg-card-hover: rgba(35, 23, 66, 0.85);
+  --bg-glass: rgba(255, 255, 255, 0.04);
+  
+  --neon-pink: #ff007f;
+  --neon-purple: #8a2be2;
+  --neon-cyan: #00f0ff;
+  --neon-yellow: #ffee00;
+  --neon-green: #00ff88;
+
+  --text-main: #ffffff;
+  --text-muted: #b1a5d4;
+  --text-dim: #706296;
+
+  --glow-pink: 0 0 20px rgba(255, 0, 127, 0.6), 0 0 40px rgba(255, 0, 127, 0.3);
+  --glow-cyan: 0 0 20px rgba(0, 240, 255, 0.6), 0 0 40px rgba(0, 240, 255, 0.3);
+  --glow-purple: 0 0 25px rgba(138, 43, 226, 0.5);
+  --glow-gold: 0 0 25px rgba(255, 238, 0, 0.7);
+
+  --gradient-main: linear-gradient(135deg, #ff007f 0%, #8a2be2 50%, #00f0ff 100%);
+  --gradient-btn: linear-gradient(90deg, #ff007f 0%, #8a2be2 100%);
+  --gradient-gold: linear-gradient(135deg, #ffee00 0%, #ff8800 100%);
+  
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-sm: 10px;
+}
+
+/* --- Essential Functional Rule --- */
+[hidden] { display: none !important; }
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+  line-height: 1.5;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-image: 
+    radial-gradient(circle at 15% 15%, rgba(255, 0, 127, 0.18) 0%, transparent 40%),
+    radial-gradient(circle at 85% 30%, rgba(138, 43, 226, 0.2) 0%, transparent 45%),
+    radial-gradient(circle at 50% 85%, rgba(0, 240, 255, 0.15) 0%, transparent 40%);
+  background-attachment: fixed;
+}
+
+/* Subtle Stage Grid Backdrop Pattern */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.4 !important;
+  filter: grayscale(0.8);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.app {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.app__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 24px;
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  margin-bottom: 32px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.app__logo {
+  background: var(--gradient-main);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-family: 'Syne', 'Noto Sans KR', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  text-shadow: 0 0 20px rgba(255, 0, 127, 0.4);
+  padding: 0;
+}
+
+.app__logo:hover {
+  transform: scale(1.05);
+}
+
+/* Progress Bar */
+.progress {
+  flex: 1;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.progress__label {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--neon-cyan);
+  letter-spacing: 0.1em;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.progress__track {
+  height: 10px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  overflow: hidden;
+  padding: 1px;
+}
+
+.progress__bar {
+  height: 100%;
+  width: var(--progress, 0%);
+  background: var(--gradient-main);
+  border-radius: 999px;
+  box-shadow: 0 0 12px var(--neon-pink);
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.app__main {
+  flex: 1;
+}
+
+/* Hero Section */
+.screen--main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+.hero {
+  text-align: center;
+  padding: 60px 24px;
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 0, 127, 0.25);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 0 30px rgba(255, 0, 127, 0.05);
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(0, 240, 255, 0.2) 0%, transparent 70%);
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+.hero__title {
+  font-family: 'Syne', 'Noto Sans KR', sans-serif;
+  font-size: clamp(3.5rem, 10vw, 6rem);
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.05;
+  margin-bottom: 16px;
+  text-shadow: 
+    0 0 10px #fff,
+    0 0 20px var(--neon-pink),
+    0 0 40px var(--neon-pink),
+    0 0 80px var(--neon-purple);
+  animation: glowPulse 3s infinite alternate ease-in-out;
+}
+
+@keyframes glowPulse {
+  0% { text-shadow: 0 0 10px #fff, 0 0 20px var(--neon-pink), 0 0 40px var(--neon-pink); }
+  100% { text-shadow: 0 0 15px #fff, 0 0 30px var(--neon-cyan), 0 0 60px var(--neon-purple), 0 0 90px var(--neon-pink); }
+}
+
+.hero__subtitle {
+  font-size: clamp(1.05rem, 3vw, 1.35rem);
+  color: var(--text-muted);
+  margin-bottom: 40px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+.btn--start {
+  font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  padding: 18px 48px;
+  background: var(--gradient-btn);
+  color: #fff;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: var(--glow-pink);
+  letter-spacing: 0.05em;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn--start:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 0 30px var(--neon-pink), 0 0 60px var(--neon-purple);
+}
+
+.btn--start:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+/* STEP Screen */
+.screen--step {
+  animation: fadeIn 0.35s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.step__badge {
+  display: inline-block;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--neon-cyan);
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  padding: 6px 16px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+  letter-spacing: 0.1em;
+}
+
+.step__title {
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+
+.step__desc {
+  color: var(--text-muted);
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+
+.step__hint {
+  color: var(--neon-yellow);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+/* Option Grid */
+.option-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin: 28px 0;
+}
+
+.option-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 20px;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  border: 2px solid rgba(138, 43, 226, 0.3);
+  border-radius: var(--radius-md);
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.option-card:hover {
+  border-color: var(--neon-cyan);
+  transform: translateY(-4px);
+  box-shadow: var(--glow-cyan);
+  background: var(--bg-card-hover);
+}
+
+.option-card.is-selected {
+  border-color: var(--neon-pink);
+  background: linear-gradient(145deg, rgba(255, 0, 127, 0.2) 0%, rgba(22, 14, 42, 0.9) 100%);
+  box-shadow: var(--glow-pink);
+  transform: translateY(-4px) scale(1.02);
+}
+
+.option-card.is-selected::after {
+  content: '✓';
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 24px;
+  height: 24px;
+  background: var(--neon-pink);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 900;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px var(--neon-pink);
+}
+
+.option-card__icon {
+  font-size: 2.2rem;
+  margin-bottom: 4px;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+}
+
+.option-card__label {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.option-card__desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.step__nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+/* Buttons */
+.btn {
+  font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 12px 28px;
+  border-radius: var(--radius-sm);
+  transition: all 0.25s ease;
+}
+
+.btn--primary {
+  background: var(--gradient-btn);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
+}
+
+.btn--primary:hover:not(:disabled) {
+  box-shadow: var(--glow-pink);
+  transform: translateY(-2px);
+}
+
+.btn--ghost {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.btn--danger {
+  background: rgba(255, 0, 85, 0.15);
+  color: #ff3366;
+  border: 1px solid rgba(255, 0, 85, 0.4);
+}
+
+.btn--danger:hover {
+  background: #ff0055;
+  color: #fff;
+  box-shadow: 0 0 15px rgba(255, 0, 85, 0.6);
+}
+
+.btn--sm {
+  padding: 6px 14px;
+  font-size: 0.85rem;
+}
+
+.btn--admin {
+  background: rgba(0, 0, 0, 0.5);
+  color: var(--text-dim);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.8rem;
+  padding: 8px 16px;
+  border-radius: 999px;
+}
+
+.btn--admin:hover {
+  color: var(--neon-cyan);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+}
+
+/* Loading Screen */
+.loading {
+  text-align: center;
+  padding: 100px 20px;
+}
+
+.loading__spinner {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 28px;
+  border: 5px solid rgba(138, 43, 226, 0.2);
+  border-top-color: var(--neon-pink);
+  border-right-color: var(--neon-cyan);
+  border-radius: 50%;
+  animation: spin 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+  box-shadow: 0 0 25px rgba(255, 0, 127, 0.5);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading__text {
+  font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.01em;
+  animation: pulseText 1.5s infinite alternate;
+}
+
+@keyframes pulseText {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; text-shadow: 0 0 12px var(--neon-cyan); }
+}
+
+/* Result Screen */
+.result__title {
+  font-family: 'Syne', 'Noto Sans KR', sans-serif;
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 20px;
+  background: var(--gradient-main);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.result__summary {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+
+.chip, .tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  background: rgba(138, 43, 226, 0.2);
+  border: 1px solid rgba(138, 43, 226, 0.5);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-main);
+  backdrop-filter: blur(8px);
+}
+
+.chip--concept { border-color: var(--neon-pink); color: #ff88cc; }
+.chip--song { border-color: var(--neon-cyan); color: #88f0ff; }
+.chip--look { border-color: var(--neon-yellow); color: #ffee88; }
+
+/* 1st Place Card - Main VIP Stage */
+.match-card--main {
+  background: linear-gradient(135deg, rgba(35, 18, 60, 0.9) 0%, rgba(15, 8, 30, 0.95) 100%);
+  border: 2px solid var(--neon-yellow);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  display: flex;
+  gap: 28px;
+  box-shadow: var(--glow-gold), inset 0 0 20px rgba(255, 238, 0, 0.1);
+  margin-bottom: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.match-card--main::before {
+  content: '★ 1ST PLACE BEST MATCH ★';
+  position: absolute;
+  top: 14px;
+  right: -35px;
+  transform: rotate(25deg);
+  background: var(--gradient-gold);
+  color: #000;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 900;
+  padding: 4px 40px;
+  box-shadow: 0 0 10px rgba(255, 238, 0, 0.8);
+}
+
+.match-card--main .match-card__media {
+  flex: 0 0 220px;
+  position: relative;
+}
+
+.match-card__image {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.match-card__rank {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 4px 12px;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid var(--neon-yellow);
+  color: var(--neon-yellow);
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 900;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 0 10px rgba(255, 238, 0, 0.5);
+}
+
+.match-card__badge {
+  display: inline-block;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: #000;
+  background: var(--neon-yellow);
+  padding: 3px 10px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+}
+
+.match-card__name {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.match-card__percent-value {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: var(--neon-pink);
+  text-shadow: 0 0 15px rgba(255, 0, 127, 0.6);
+  line-height: 1;
+}
+
+.match-card__percent-label {
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+
+.match-card__desc {
+  color: var(--text-muted);
+  margin: 12px 0 20px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* Match Breakdown Bars */
+.breakdown {
+  margin: 16px 0;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.breakdown__row {
+  display: grid;
+  grid-template-columns: 60px 1fr 45px;
+  gap: 12px;
+  align-items: center;
+  margin: 8px 0;
+  font-size: 0.85rem;
+}
+
+.breakdown__label {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.breakdown__track {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.breakdown__fill {
+  height: 100%;
+  background: var(--gradient-main);
+  border-radius: 999px;
+  box-shadow: 0 0 10px var(--neon-pink);
+}
+
+.breakdown__value {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  color: var(--neon-cyan);
+  text-align: right;
+}
+
+/* 2nd & 3rd Place Cards */
+.result__sub-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin: 36px 0 16px;
+}
+
+.result__sub {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.match-card--sub {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.25s ease;
+}
+
+.match-card--sub:hover {
+  border-color: var(--neon-cyan);
+  transform: translateY(-4px);
+  box-shadow: var(--glow-cyan);
+}
+
+.match-card--sub .match-card__media {
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.match-card--sub .match-card__rank {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
+}
+
+.match-card--sub .match-card__name {
+  font-size: 1.4rem;
+}
+
+.match-card--sub .match-card__percent-value {
+  font-size: 2rem;
+  color: var(--neon-cyan);
+}
+
+.result__actions {
+  margin-top: 40px;
+  text-align: center;
+}
+
+/* Admin Panel & Modal */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+}
+
+.modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 2, 12, 0.85);
+}
+
+.modal__dialog {
+  position: relative;
+  background: #150d2a;
+  border: 1px solid var(--neon-pink);
+  box-shadow: var(--glow-pink);
+  padding: 32px;
+  border-radius: var(--radius-md);
+  width: min(90vw, 400px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modal__title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.modal__error, .admin__form-error {
+  color: #ff3366;
+  font-size: 0.85rem;
+  min-height: 1.25em;
+}
+
+.form-field {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.form-field__label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-sm);
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+}
+
+/* Admin Dashboard Screen */
+.admin {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+}
+
+.admin__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.admin__title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.admin__status {
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+.admin__body {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 28px;
+}
+
+@media (max-width: 768px) {
+  .admin__body { grid-template-columns: 1fr; }
+  .match-card--main { flex-direction: column; }
+  .match-card--main .match-card__media { flex: 1; }
+}
+
+.admin__toolbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.admin__list {
+  list-style: none;
+  max-height: 480px;
+  overflow-y: auto;
+}
+
+.admin__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+}
+
+.admin__item.is-editing {
+  border-color: var(--neon-pink);
+  background: rgba(255, 0, 127, 0.1);
+}
+
+.admin__item-name {
+  flex: 1;
+  font-weight: 700;
+  color: #fff;
+}
+
+.admin__thumb {
+  width: 42px;
+  height: 42px;
+  border-radius: 6px;
+  object-fit: cover;
+  background: #222;
+}
+
+.score-group {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  margin-bottom: 16px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.score-group__title {
+  color: var(--neon-cyan);
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0 4px;
+}
+
+.score-field {
+  display: grid;
+  grid-template-columns: 1fr 90px;
+  gap: 12px;
+  align-items: center;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.modal__actions, .admin__form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+/* ==========================================================================
+   [DEV PATCH] 디자인 CSS에 없던 요소용 최소 보정 (디자인 변수만 사용 / 필요 시 삭제·수정 가능)
+   - .match-card__tags : 1위 카드의 태그 칩 간격 (JS가 생성, 없으면 칩이 붙어서 표시됨)
+   - .match-card__body : 1위 카드에서 이미지 옆 본문이 남는 폭을 채우도록
+   - .result__empty / .admin__empty : 결과·목록이 비었을 때 안내 문구
+   ========================================================================== */
+.match-card--main .match-card__body { flex: 1; min-width: 0; }
+.match-card__tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.result__empty, .admin__empty { color: var(--text-muted); text-align: center; padding: 32px 16px; }
+
+/* --- 관리자 이미지 업로드 필드 + 자동 맞춤 --- */
+.image-field { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 10px; }
+.image-field__preview {
+  flex: 0 0 96px; aspect-ratio: 4 / 5; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px dashed rgba(255, 255, 255, 0.25); border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.4);
+}
+.image-field__img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; }
+.image-field__empty { padding: 4px; font-size: 0.75rem; color: var(--text-dim); text-align: center; }
+.image-field__controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.image-field__upload { display: inline-block; cursor: pointer; }
+.image-field__hint { flex-basis: 100%; font-size: 0.8rem; color: var(--text-dim); }
+/* URL 이미지도 카드 비율(4:5)에 맞춰 잘리도록(이미 object-fit: cover), 얼굴이 위쪽에 오는 사진 기준으로 정렬 */
+.match-card__image { object-position: center 20%; }
+
+/* --- 관리자: GitHub 연동 설정 (details/summary 접이식) --- */
+.admin__github { margin: 16px 0; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: var(--radius-sm); padding: 12px 16px; }
+.admin__github-summary { cursor: pointer; font-weight: 700; }
+.admin__github-body { margin-top: 12px; display: flex; flex-direction: column; }
+.admin__github-hint { font-size: 0.8rem; color: var(--text-dim); margin: 0 0 8px; }
+</style>
+</head>
+
+<body>
+<div class="app" id="app">
+
+  <!-- ===== 헤더: 로고 + 진행바 ===== -->
+  <header class="app__header">
+    <button type="button" class="app__logo" id="btn-logo">찾아돌</button>
+    <div class="progress" id="progress" role="progressbar" aria-label="진행률"
+         aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden>
+      <div class="progress__label" id="progress-label"></div>
+      <div class="progress__track"><div class="progress__bar"></div></div>
+    </div>
+  </header>
+
+  <main class="app__main">
+
+    <!-- ===== 메인 화면 ===== -->
+    <section class="screen screen--main" data-screen="main">
+      <div class="hero">
+        <h1 class="hero__title">찾아돌</h1>
+        <p class="hero__subtitle">최애에 맞는 아이돌을 찾아드립니다</p>
+        <button type="button" class="btn btn--start" id="btn-start">시작하기</button>
+      </div>
+    </section>
+
+    <!-- ===== STEP 1~3 (JS가 내용을 채워 재사용) ===== -->
+    <section class="screen screen--step" data-screen="step" hidden>
+      <p class="step__badge" id="step-badge"></p>
+      <h2 class="step__title" id="step-title"></h2>
+      <p class="step__desc" id="step-desc"></p>
+      <p class="step__hint" id="step-hint"></p>
+      <div class="option-grid" id="option-grid" role="group" aria-labelledby="step-title"></div>
+      <div class="step__nav">
+        <button type="button" class="btn btn--ghost" id="btn-prev">이전</button>
+        <button type="button" class="btn btn--primary" id="btn-next" disabled>다음</button>
+      </div>
+    </section>
+
+    <!-- ===== 로딩 (매칭 연산 연출) ===== -->
+    <section class="screen screen--loading" data-screen="loading" hidden>
+      <div class="loading" role="status" aria-live="polite">
+        <div class="loading__spinner"></div>
+        <p class="loading__text">AI가 최애를 찾고 있어요...</p>
+      </div>
+    </section>
+
+    <!-- ===== STEP 4: 결과 ===== -->
+    <section class="screen screen--result" data-screen="result" hidden>
+      <h2 class="result__title">AI 매칭 결과</h2>
+      <div class="result__summary" id="result-summary"></div>
+      <div class="result__main" id="result-main"></div>
+      <h3 class="result__sub-title" id="result-sub-title" hidden>이런 아이돌은 어때요?</h3>
+      <div class="result__sub" id="result-sub"></div>
+      <div class="result__actions">
+        <button type="button" class="btn btn--primary" id="btn-retry">다시 하기</button>
+      </div>
+    </section>
+
+    <!-- ===== 관리자 화면 ===== -->
+    <section class="screen screen--admin admin" data-screen="admin" hidden>
+      <div class="admin__header">
+        <h2 class="admin__title">관리자 모드</h2>
+        <button type="button" class="btn btn--ghost" id="btn-admin-exit">나가기</button>
+      </div>
+      <p class="admin__status" id="admin-status"></p>
+
+      <details class="admin__github" id="admin-github">
+        <summary class="admin__github-summary">GitHub 연동 설정</summary>
+        <div class="admin__github-body">
+          <p class="admin__github-hint">
+            여기에 저장소 정보와 토큰을 입력해두면, 이후 저장·수정·삭제할 때마다 저장소의 데이터 파일에 자동으로 커밋되어
+            모든 방문자에게 반영됩니다. 토큰은 "이 저장소 전용 + Contents 권한만" 가진 fine-grained 토큰을 권장해요.
+          </p>
+          <label class="form-field">
+            <span class="form-field__label">저장소 소유자 (GitHub 아이디)</span>
+            <input type="text" class="form-input" id="gh-owner" placeholder="예: myGithubId" autocomplete="off">
+          </label>
+          <label class="form-field">
+            <span class="form-field__label">저장소 이름</span>
+            <input type="text" class="form-input" id="gh-repo" placeholder="예: chajadol" autocomplete="off">
+          </label>
+          <label class="form-field">
+            <span class="form-field__label">브랜치</span>
+            <input type="text" class="form-input" id="gh-branch" placeholder="main" autocomplete="off">
+          </label>
+          <label class="form-field">
+            <span class="form-field__label">데이터 파일 경로</span>
+            <input type="text" class="form-input" id="gh-path" placeholder="data/idols.json" autocomplete="off">
+          </label>
+          <label class="form-field">
+            <span class="form-field__label">Personal Access Token</span>
+            <input type="password" class="form-input" id="gh-token" placeholder="github_pat_..." autocomplete="off">
+          </label>
+          <p class="admin__form-error" id="gh-error" role="alert"></p>
+          <div class="admin__form-actions">
+            <button type="button" class="btn btn--ghost btn--sm" id="btn-gh-test">연결 테스트</button>
+            <button type="button" class="btn btn--danger btn--sm" id="btn-gh-disconnect">연동 해제</button>
+            <button type="button" class="btn btn--primary btn--sm" id="btn-gh-save">저장</button>
+          </div>
+        </div>
+      </details>
+
+      <div class="admin__body">
+        <div class="admin__list-wrap">
+          <div class="admin__toolbar">
+            <button type="button" class="btn btn--primary btn--sm" id="btn-admin-new">+ 새 아이돌</button>
+            <button type="button" class="btn btn--danger btn--sm" id="btn-admin-reset">기본 데이터로 초기화</button>
+          </div>
+          <ul class="admin__list" id="admin-list"></ul>
+        </div>
+
+        <form class="admin__form" id="admin-form" novalidate>
+          <h3 class="admin__form-title" id="admin-form-title">새 아이돌 추가</h3>
+
+          <label class="form-field">
+            <span class="form-field__label">이름 *</span>
+            <input type="text" class="form-input" id="field-name" maxlength="40" autocomplete="off">
+          </label>
+          <div class="form-field">
+            <span class="form-field__label">대표 이미지</span>
+            <div class="image-field">
+              <div class="image-field__preview">
+                <img class="image-field__img" id="image-preview-img" alt="이미지 미리보기" hidden>
+                <span class="image-field__empty" id="image-preview-empty">이미지 없음</span>
+              </div>
+              <div class="image-field__controls">
+                <label class="btn btn--ghost btn--sm image-field__upload">
+                  이미지 파일 선택
+                  <input type="file" id="field-image-file" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
+                </label>
+                <button type="button" class="btn btn--ghost btn--sm" id="btn-image-clear">이미지 제거</button>
+                <p class="image-field__hint">PNG·JPG·WebP 지원. 4:5 비율로 자동으로 맞춰 저장돼요.</p>
+              </div>
+            </div>
+            <input type="text" class="form-input" id="field-image" placeholder="또는 이미지 URL 입력 (https://...)" autocomplete="off">
+          </div>
+          <label class="form-field">
+            <span class="form-field__label">설명 문구</span>
+            <textarea class="form-input" id="field-desc" rows="3" maxlength="200"></textarea>
+          </label>
+
+          <!-- 태그 점수 입력칸: STEPS 설정에서 JS가 자동 생성 -->
+          <div id="score-groups"></div>
+
+          <p class="admin__form-error" id="admin-form-error" role="alert"></p>
+          <div class="admin__form-actions">
+            <button type="button" class="btn btn--ghost" id="btn-random-fill">🎲 점수 랜덤 채우기</button>
+            <button type="button" class="btn btn--ghost" id="btn-form-cancel">취소</button>
+            <button type="submit" class="btn btn--primary">저장</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app__footer" style="margin-top:40px; text-align:center;">
+    <button type="button" class="btn btn--admin" id="btn-admin-open">관리자 모드</button>
+  </footer>
+</div>
+
+<!-- ===== 관리자 로그인 모달 ===== -->
+<div class="modal" id="modal-login" hidden>
+  <div class="modal__backdrop" id="modal-backdrop"></div>
+  <form class="modal__dialog" id="login-form" role="dialog" aria-modal="true" aria-labelledby="login-title">
+    <h2 class="modal__title" id="login-title">관리자 인증</h2>
+    <input type="password" class="form-input" id="login-password" placeholder="비밀번호" autocomplete="off">
+    <p class="modal__error" id="login-error" role="alert"></p>
+    <div class="modal__actions">
+      <button type="button" class="btn btn--ghost" id="btn-login-cancel">취소</button>
+      <button type="submit" class="btn btn--primary">확인</button>
+    </div>
+  </form>
+</div>
+
+<script>
+(() => {
+'use strict';
+
+/* ==========================================================================
+   1. 설정 (CONFIG)
+   ========================================================================== */
+const CONFIG = {
+  ADMIN_PASSWORD: '1234',              // ※ 클라이언트 코드에 노출되므로 "보안"이 아닌 "실수 방지" 용도입니다.
+  STORAGE_KEY: 'chajadol:idols:v1',    // localStorage 키 (데이터 구조를 바꾸면 v2로 올릴 것)
+  MATCHING_DELAY_MS: 1200,             // 결과 계산 연출 시간 (0으로 두면 즉시 표시)
+  RANDOM_MIN: 10,                      // 랜덤 점수 범위
+  RANDOM_MAX: 100,
+  TOP_N: 3,                            // 결과 노출 개수 (1위 메인 + 나머지 서브)
+
+  /* 관리자 이미지 업로드 설정: 업로드한 파일은 아래 크기(4:5 비율)로 "꽉 차게 잘라서" JPEG로 저장됩니다. */
+  IMAGE: {
+    WIDTH: 480,                        // 저장 이미지 가로(px)
+    HEIGHT: 600,                       // 저장 이미지 세로(px) — 결과 카드 이미지 비율(4:5)과 동일
+    QUALITY: 0.82,                     // JPEG 품질 (0~1). 낮출수록 localStorage 용량 절약
+    FOCUS_Y: 0.25,                     // 세로로 긴 사진을 자를 때 위쪽 기준 위치 (0=맨 위, 0.5=중앙) — 얼굴이 위쪽에 있는 사진 대응
+    BG: '#130c25',                     // 투명 PNG의 투명 영역을 채울 배경색
+    MAX_FILE_MB: 10                    // 업로드 허용 최대 원본 용량
+  },
+
+  /* GitHub 연동 설정: 관리자가 저장하면 이 저장소의 데이터 파일에 직접 커밋합니다.
+     ⚠ 정적 사이트(서버 없음) 특성상 토큰이 브라우저 코드에 그대로 남습니다.
+        저장소가 공개(public)라면 반드시 "이 저장소 전용 + Contents 권한만" 가진
+        fine-grained 토큰을 쓰세요. 유출되면 그 저장소만 위험해지도록 범위를 최소화하는 목적입니다. */
+  GITHUB: {
+    STORAGE_KEY: 'chajadol:github:v1',
+    API_BASE: 'https://api.github.com',
+    DEFAULT_PATH: 'data/idols.json',
+    DEFAULT_BRANCH: 'main'
+  }
+};
+
+/* STEP 정의: 여기만 수정하면 화면·관리자 폼·매칭 알고리즘에 모두 반영됩니다.
+   - key       : 데이터 저장 키 (idol.scores[key][optionId])
+   - weight    : 최종 일치율 계산 시 가중치 (기본 1:1:1)
+   - maxSelect : 1이면 단일 선택, 2 이상이면 복수 선택(가득 차면 가장 오래된 선택이 해제됨) */
+const STEPS = [
+  {
+    key: 'concept', label: '컨셉', weight: 1, maxSelect: 1,
+    title: '원하는 아이돌 컨셉을 골라주세요',
+    desc: '무대와 콘셉트에서 어떤 모습이 끌리나요?',
+    options: [
+      { id: 'lovely',   icon: '🍓', label: '큐티·러블리',     desc: '사랑스럽고 발랄한 매력' },
+      { id: 'fresh',    icon: '🌊', label: '청량·상큼',       desc: '여름 같은 풋풋함' },
+      { id: 'powerful', icon: '🔥', label: '파워풀·카리스마', desc: '무대를 압도하는 에너지' },
+      { id: 'dark',     icon: '🌙', label: '다크·미스터리',   desc: '강렬하고 신비로운 세계관' },
+      { id: 'retro',    icon: '📼', label: '레트로·힙',       desc: 'Y2K 감성의 트렌디함' }
+    ]
+  },
+  {
+    key: 'song', label: '노래', weight: 1, maxSelect: 1,
+    title: '좋아하는 노래 스타일을 골라주세요',
+    desc: '자주 듣게 되는 노래는 어떤 느낌인가요?',
+    options: [
+      { id: 'dance',  icon: '💃', label: '퍼포먼스 댄스', desc: '칼군무가 돋보이는 강렬한 곡' },
+      { id: 'pop',    icon: '🎵', label: '밝은 팝',       desc: '중독성 있는 멜로디' },
+      { id: 'hiphop', icon: '🎤', label: '힙합·랩',       desc: '그루브 넘치는 비트' },
+      { id: 'rnb',    icon: '🎧', label: 'R&B·무드',      desc: '몽글몽글 감성적인 분위기' },
+      { id: 'ballad', icon: '🎹', label: '발라드',        desc: '서정적인 보컬 중심의 곡' }
+    ]
+  },
+  {
+    key: 'look', label: '외모', weight: 1, maxSelect: 1,
+    title: '원하는 이상형 외모/분위기를 골라주세요',
+    desc: '첫인상이 끌리는 쪽은 어디인가요?',
+    options: [
+      { id: 'puppy',  icon: '🐶', label: '강아지상',     desc: '귀엽고 순한 인상' },
+      { id: 'cat',    icon: '🐱', label: '고양이상',     desc: '시크하고 도도한 인상' },
+      { id: 'warm',   icon: '☀️', label: '다정한 분위기', desc: '따뜻하고 편안한 느낌' },
+      { id: 'sharp',  icon: '✨', label: '또렷한 이목구비', desc: '선명하고 화려한 느낌' },
+      { id: 'dreamy', icon: '🌷', label: '몽환적 분위기', desc: '신비롭고 아련한 느낌' }
+    ]
+  }
+];
+
+/* 기본 샘플 데이터 (가상의 인물). 점수는 로드할 때마다 랜덤 생성됩니다. */
+const SAMPLE_IDOLS = [
+  { name: '하루', desc: '밝은 에너지로 분위기를 바꾸는 무대 위의 비타민.' },
+  { name: '시안', desc: '차분한 카리스마와 깊은 눈빛이 매력적인 메인 보컬.' },
+  { name: '이서', desc: '어떤 콘셉트도 자기 것으로 만드는 만능 퍼포머.' },
+  { name: '노아', desc: '부드러운 음색과 다정한 미소가 돋보이는 멤버.' },
+  { name: '리아', desc: '트렌디한 감각으로 시선을 사로잡는 비주얼 센터.' },
+  { name: '도윤', desc: '리듬을 타는 랩과 강렬한 퍼포먼스가 강점.' },
+  { name: '유나', desc: '청량한 목소리로 여름을 노래하는 막내.' },
+  { name: '카이', desc: '몽환적인 분위기와 독특한 표현력을 가진 아티스트.' }
+];
+
+/* ==========================================================================
+   2. 유틸
+   ========================================================================== */
+const $  = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
+const randomScore = () =>
+  CONFIG.RANDOM_MIN + Math.floor(Math.random() * (CONFIG.RANDOM_MAX - CONFIG.RANDOM_MIN + 1));
+const genId = () => 'idol-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const findOption = (step, id) => step.options.find(o => o.id === id);
+
+/* DOM 생성 헬퍼: innerHTML을 쓰지 않아 관리자 입력값이 그대로 텍스트로만 렌더링됩니다(XSS 방지). */
+function el(tag, props = {}, children = []) {
+  const node = document.createElement(tag);
+  for (const [k, v] of Object.entries(props)) {
+    if (v === null || v === undefined || v === false) continue;
+    if (k === 'class') node.className = v;
+    else if (k === 'text') node.textContent = v;
+    else if (k === 'dataset') Object.assign(node.dataset, v);
+    else if (k.startsWith('on') && typeof v === 'function') node.addEventListener(k.slice(2).toLowerCase(), v);
+    else node.setAttribute(k, v === true ? '' : v);
+  }
+  for (const c of [].concat(children)) {
+    if (c === null || c === undefined || c === false) continue;
+    node.append(c.nodeType ? c : document.createTextNode(String(c)));
+  }
+  return node;
+}
+
+const escapeXml = s => s.replace(/[<>&"']/g, ch => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;', "'": '&apos;' }[ch]));
+
+/* 이미지 URL이 없거나 로드 실패 시 사용하는 기본 이미지 (data URI) */
+function placeholderImage(name) {
+  const initial = escapeXml(((name || '?').trim().charAt(0)) || '?');
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="500" viewBox="0 0 400 500">` +
+    `<rect width="400" height="500" fill="#130c25"/>` +
+    `<circle cx="200" cy="250" r="120" fill="rgba(255,0,127,0.15)"/>` +
+    `<text x="200" y="295" font-size="140" text-anchor="middle" fill="#ff007f" font-family="sans-serif" font-weight="900">${initial}</text></svg>`;
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+
+function buildImage(idol, className) {
+  const fallback = placeholderImage(idol.name);
+  const img = el('img', { class: className, alt: `${idol.name} 대표 이미지`, loading: 'lazy', referrerpolicy: 'no-referrer' });
+  img.addEventListener('error', () => { if (img.src !== fallback) img.src = fallback; });
+  img.src = idol.image || fallback;
+  return img;
+}
+
+/* ==========================================================================
+   3. 데이터 계층 (localStorage)
+   ========================================================================== */
+/* 아이돌 데이터 스키마:
+   { id, name, image, desc, scores: { concept:{lovely:0~100,...}, song:{...}, look:{...} } } */
+function normalizeIdol(raw) {
+  if (!raw || typeof raw !== 'object' || !String(raw.name || '').trim()) return null;
+  const scores = {};
+  for (const step of STEPS) {
+    scores[step.key] = {};
+    for (const opt of step.options) {
+      const src = raw.scores && raw.scores[step.key] ? raw.scores[step.key][opt.id] : undefined;
+      const n = (src === undefined || src === null || src === '') ? NaN : Number(src);
+      // 값이 비어 있거나 숫자가 아니면 랜덤 점수로 채움
+      scores[step.key][opt.id] = Number.isFinite(n) ? clamp(Math.round(n), 0, 100) : randomScore();
+    }
+  }
+  return {
+    id: raw.id || genId(),
+    name: String(raw.name).trim(),
+    image: String(raw.image || '').trim(),
+    desc: String(raw.desc || '').trim(),
+    scores
+  };
+}
+
+const Store = {
+  /* 저장된 데이터가 없으면 null, 있으면 배열(빈 배열 포함) 반환 */
+  load() {
+    try {
+      const raw = localStorage.getItem(CONFIG.STORAGE_KEY);
+      if (raw === null) return null;
+      const arr = JSON.parse(raw);
+      if (!Array.isArray(arr)) return null;
+      return arr.map(normalizeIdol).filter(Boolean);
+    } catch (e) { return null; }
+  },
+  save(list) {
+    try { localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(list)); return true; }
+    catch (e) { return false; }
+  },
+  clear() {
+    try { localStorage.removeItem(CONFIG.STORAGE_KEY); } catch (e) { /* noop */ }
+  }
+};
+
+/* GitHub 연동: 저장소의 JSON 파일을 읽고, 관리자가 저장할 때 그 파일에 커밋합니다.
+   - 읽기(fetchRemote): 토큰 없이도 되는 raw.githubusercontent.com 사용 (공개 저장소 기준)
+   - 쓰기(push): GitHub Contents API(PUT)로 커밋 생성. 파일이 없으면 새로 만듭니다. */
+const GitHubSync = {
+  load() {
+    try {
+      const raw = localStorage.getItem(CONFIG.GITHUB.STORAGE_KEY);
+      if (!raw) return null;
+      const cfg = JSON.parse(raw);
+      if (!cfg || !cfg.owner || !cfg.repo || !cfg.token) return null;
+      return {
+        owner: cfg.owner,
+        repo: cfg.repo,
+        path: cfg.path || CONFIG.GITHUB.DEFAULT_PATH,
+        branch: cfg.branch || CONFIG.GITHUB.DEFAULT_BRANCH,
+        token: cfg.token
+      };
+    } catch (e) { return null; }
+  },
+  save(cfg) {
+    try { localStorage.setItem(CONFIG.GITHUB.STORAGE_KEY, JSON.stringify(cfg)); return true; }
+    catch (e) { return false; }
+  },
+  clear() { try { localStorage.removeItem(CONFIG.GITHUB.STORAGE_KEY); } catch (e) { /* noop */ } },
+
+  contentsUrl(cfg) {
+    const path = cfg.path.split('/').filter(Boolean).map(encodeURIComponent).join('/');
+    return `${CONFIG.GITHUB.API_BASE}/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${path}`;
+  },
+  rawUrl(cfg) {
+    return `https://raw.githubusercontent.com/${cfg.owner}/${cfg.repo}/${cfg.branch}/${cfg.path}`;
+  },
+
+  async fetchRemote(cfg) {
+    const res = await fetch(`${this.rawUrl(cfg)}?t=${Date.now()}`, { cache: 'no-store' });
+    if (res.status === 404) {
+      const err = new Error('저장소에 아직 데이터 파일이 없어요.');
+      err.notFound = true;
+      throw err;
+    }
+    if (!res.ok) throw new Error(`저장소 데이터를 불러오지 못했어요 (${res.status})`);
+    const arr = await res.json();
+    if (!Array.isArray(arr)) throw new Error('저장소 데이터 형식이 올바르지 않아요.');
+    return arr;
+  },
+
+  async fetchSha(cfg) {
+    const res = await fetch(`${this.contentsUrl(cfg)}?ref=${encodeURIComponent(cfg.branch)}`, {
+      headers: { Authorization: `Bearer ${cfg.token}`, Accept: 'application/vnd.github+json' }
+    });
+    if (res.status === 404) return null;                 // 파일이 아직 없음 → 새로 생성하면 됨
+    if (!res.ok) throw new Error(`GitHub 연결 확인 실패 (${res.status}). 토큰 권한/저장소 이름을 확인해주세요.`);
+    const data = await res.json();
+    return data.sha || null;
+  },
+
+  async push(cfg, idols) {
+    const sha = await this.fetchSha(cfg);
+    const jsonText = JSON.stringify(idols, null, 2);
+    const content = btoa(unescape(encodeURIComponent(jsonText)));   // UTF-8 안전 base64 인코딩
+    const body = {
+      message: `chore: 찾아돌 데이터 업데이트 (${new Date().toISOString()})`,
+      content,
+      branch: cfg.branch
+    };
+    if (sha) body.sha = sha;
+
+    const res = await fetch(this.contentsUrl(cfg), {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${cfg.token}`,
+        Accept: 'application/vnd.github+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) {
+      const errText = await res.text().catch(() => '');
+      throw new Error(`GitHub 저장 실패 (${res.status}) ${errText.slice(0, 140)}`);
+    }
+  }
+};
+
+function createDefaultIdols() {
+  return SAMPLE_IDOLS.map((s, i) => normalizeIdol({ id: 'sample-' + (i + 1), name: s.name, desc: s.desc, image: '' }));
+}
+
+/* ==========================================================================
+   4. 앱 상태
+   ========================================================================== */
+const state = {
+  screen: 'main',
+  stepIndex: 0,
+  selections: {},        // { concept: ['fresh'], song: [...], look: [...] }
+  idols: [],
+  isDefaultData: true,   // true: 샘플+랜덤 점수 (아직 localStorage에 저장 안 됨)
+  storageError: false,
+  isAdmin: false,
+  isMatching: false,
+  matchTimer: null,
+  editingId: null,
+  formImage: '',         // 관리자 폼에서 업로드한 이미지 (data URI). 비어 있으면 URL 입력칸 값을 사용
+  githubStatus: 'idle',  // 'idle' | 'syncing' | 'synced' | 'error'
+  githubError: ''
+};
+
+async function loadData() {
+  const cfg = GitHubSync.load();
+  if (cfg) {
+    try {
+      const remote = await GitHubSync.fetchRemote(cfg);
+      state.idols = remote.map(normalizeIdol).filter(Boolean);
+      state.isDefaultData = false;
+      Store.save(state.idols);         // 오프라인 대비 로컬에도 백업
+      state.githubStatus = 'synced';
+      state.githubError = '';
+      return;
+    } catch (e) {
+      state.githubStatus = e.notFound ? 'idle' : 'error';
+      state.githubError = e.notFound
+        ? '저장소에 아직 데이터 파일이 없어요. 관리자에서 한 번 저장하면 자동으로 만들어져요.'
+        : (e.message || '저장소에서 데이터를 불러오지 못했어요.');
+      // 아래로 이어져 로컬 데이터로 대체
+    }
+  }
+  const saved = Store.load();
+  if (saved !== null) { state.idols = saved; state.isDefaultData = false; }
+  else { state.idols = createDefaultIdols(); state.isDefaultData = true; }
+}
+
+async function persist() {
+  const ok = Store.save(state.idols);
+  state.storageError = !ok;
+  if (ok) state.isDefaultData = false;
+
+  const cfg = GitHubSync.load();
+  if (cfg) {
+    state.githubStatus = 'syncing';
+    renderAdminStatus();
+    try {
+      await GitHubSync.push(cfg, state.idols);
+      state.githubStatus = 'synced';
+      state.githubError = '';
+    } catch (e) {
+      state.githubStatus = 'error';
+      state.githubError = e.message || '알 수 없는 오류로 GitHub 저장에 실패했어요.';
+    }
+  } else {
+    state.githubStatus = 'idle';
+    state.githubError = '';
+  }
+
+  renderAdminStatus();
+  return ok;
+}
+
+/* ==========================================================================
+   5. 매칭 알고리즘
+   --------------------------------------------------------------------------
+   ① 각 STEP에서 사용자가 고른 태그들에 대해, 아이돌의 해당 태그 점수(0~100) 평균 = STEP 점수
+   ② STEP 점수들의 가중 평균(weight) = 최종 일치율(Match Score %)
+   ③ 일치율 내림차순 정렬, 동점이면 이름순
+   ========================================================================== */
+function calcMatch(idol, selections) {
+  let weighted = 0;
+  let weightSum = 0;
+  const details = [];
+
+  for (const step of STEPS) {
+    const picked = selections[step.key] || [];
+    if (!picked.length) continue;
+
+    const tags = picked.map(id => ({
+      id,
+      label: (findOption(step, id) || {}).label || id,
+      score: (idol.scores[step.key] && idol.scores[step.key][id]) || 0
+    }));
+    const stepScore = tags.reduce((sum, t) => sum + t.score, 0) / tags.length;
+
+    weighted += stepScore * step.weight;
+    weightSum += step.weight;
+    details.push({ key: step.key, label: step.label, score: Math.round(stepScore), tags });
+  }
+
+  const raw = weightSum ? weighted / weightSum : 0;
+  return { idol, raw, percent: Math.round(raw), details };
+}
+
+function computeResults() {
+  return state.idols
+    .map(idol => calcMatch(idol, state.selections))
+    .sort((a, b) => (b.raw - a.raw) || a.idol.name.localeCompare(b.idol.name, 'ko'))
+    .slice(0, CONFIG.TOP_N);
+}
+
+/* ==========================================================================
+   6. 화면 전환 / 진행바
+   ========================================================================== */
+function showScreen(name) {
+  state.screen = name;
+  $$('.screen').forEach(s => {
+    const active = s.dataset.screen === name;
+    s.hidden = !active;
+    s.classList.toggle('is-active', active);
+  });
+  updateProgress();
+  window.scrollTo({ top: 0 });
+}
+
+function updateProgress() {
+  const total = STEPS.length;
+  const box = $('#progress');
+  let pct = 0;
+  let label = '';
+  let visible = true;
+
+  switch (state.screen) {
+    case 'step':
+      pct = ((state.stepIndex + 1) / (total + 1)) * 100;
+      label = `STEP ${state.stepIndex + 1} / ${total}`;
+      break;
+    case 'loading':
+      pct = ((total + 0.5) / (total + 1)) * 100;
+      label = 'AI 매칭 중';
+      break;
+    case 'result':
+      pct = 100;
+      label = '매칭 완료';
+      break;
+    default:
+      visible = false;
+  }
+
+  box.hidden = !visible;
+  box.style.setProperty('--progress', pct + '%');
+  box.setAttribute('aria-valuenow', String(Math.round(pct)));
+  $('#progress-label').textContent = label;
+}
+
+/* ==========================================================================
+   7. STEP 1~3 : 렌더링 & 선택 처리
+   ========================================================================== */
+function startFlow() {
+  state.selections = {};
+  goToStep(0);
+  showScreen('step');
+}
+
+function goToStep(index) {
+  state.stepIndex = index;
+  renderStep();
+  updateProgress();
+}
+
+function renderStep() {
+  const step = STEPS[state.stepIndex];
+  $('#step-badge').textContent = `STEP ${state.stepIndex + 1}`;
+  $('#step-title').textContent = step.title;
+  $('#step-desc').textContent = step.desc;
+  $('#step-hint').textContent = step.maxSelect === 1
+    ? '하나를 선택해주세요.'
+    : `최대 ${step.maxSelect}개까지 선택할 수 있어요.`;
+
+  $('#option-grid').replaceChildren(...step.options.map(opt =>
+    el('button', {
+      type: 'button',
+      class: 'option-card',
+      'aria-pressed': 'false',
+      dataset: { option: opt.id },
+      onClick: () => toggleOption(step, opt.id)
+    }, [
+      el('span', { class: 'option-card__icon', 'aria-hidden': 'true', text: opt.icon }),
+      el('span', { class: 'option-card__label', text: opt.label }),
+      el('span', { class: 'option-card__desc', text: opt.desc })
+    ])
+  ));
+
+  $('#btn-next').textContent = state.stepIndex === STEPS.length - 1 ? '결과 보기' : '다음';
+  refreshSelectionUI();
+}
+
+function toggleOption(step, optionId) {
+  let picked = (state.selections[step.key] || []).slice();
+  const idx = picked.indexOf(optionId);
+
+  if (idx >= 0) {
+    picked.splice(idx, 1);                          // 다시 누르면 해제
+  } else if (step.maxSelect === 1) {
+    picked = [optionId];                            // 단일 선택: 교체
+  } else {
+    if (picked.length >= step.maxSelect) picked.shift();  // 가득 차면 가장 오래된 것 해제
+    picked.push(optionId);
+  }
+
+  state.selections[step.key] = picked;
+  refreshSelectionUI();
+}
+
+/* 선택 상태(.is-selected, aria-pressed)와 '다음' 버튼 활성화 갱신 */
+function refreshSelectionUI() {
+  const step = STEPS[state.stepIndex];
+  const picked = state.selections[step.key] || [];
+  $$('#option-grid .option-card').forEach(btn => {
+    const on = picked.includes(btn.dataset.option);
+    btn.classList.toggle('is-selected', on);
+    btn.setAttribute('aria-pressed', String(on));
+  });
+  $('#btn-next').disabled = picked.length === 0;
+}
+
+function goNext() {
+  const step = STEPS[state.stepIndex];
+  if (!(state.selections[step.key] || []).length) return;
+  if (state.stepIndex < STEPS.length - 1) goToStep(state.stepIndex + 1);
+  else startMatching();
+}
+
+function goPrev() {
+  if (state.stepIndex > 0) goToStep(state.stepIndex - 1);
+  else showScreen('main');
+}
+
+/* ==========================================================================
+   8. STEP 4 : 매칭 실행 & 결과 렌더링
+   ========================================================================== */
+function startMatching() {
+  if (state.isMatching) return;
+  state.isMatching = true;
+  showScreen('loading');
+  state.matchTimer = setTimeout(() => {
+    state.matchTimer = null;
+    state.isMatching = false;
+    renderResults(computeResults());
+    showScreen('result');
+  }, CONFIG.MATCHING_DELAY_MS);
+}
+
+function renderResults(results) {
+  // 선택 요약 칩
+  $('#result-summary').replaceChildren(...STEPS.flatMap(step =>
+    (state.selections[step.key] || []).map(id =>
+      el('span', { class: `chip chip--${step.key}`, text: `${step.label}: ${(findOption(step, id) || {}).label || id}` })
+    )
+  ));
+
+  const mainBox = $('#result-main');
+  const subBox = $('#result-sub');
+  const subTitle = $('#result-sub-title');
+  mainBox.replaceChildren();
+  subBox.replaceChildren();
+
+  if (!results.length) {
+    mainBox.append(el('p', { class: 'result__empty', text: '등록된 아이돌이 없어요. 관리자 모드에서 아이돌을 추가해주세요.' }));
+    subTitle.hidden = true;
+    return;
+  }
+
+  mainBox.append(buildMatchCard(results[0], 1, false));
+  const subs = results.slice(1);
+  subTitle.hidden = subs.length === 0;
+  subs.forEach((r, i) => subBox.append(buildMatchCard(r, i + 2, true)));
+}
+
+function buildMatchCard(result, rank, compact) {
+  const { idol, percent, details } = result;
+
+  const body = el('div', { class: 'match-card__body' }, [
+    compact ? null : el('span', { class: 'match-card__badge', text: 'BEST MATCH' }),
+    el('h3', { class: 'match-card__name', text: idol.name }),
+    el('p', { class: 'match-card__percent' }, [
+      el('span', { class: 'match-card__percent-value', text: `${percent}%` }),
+      el('span', { class: 'match-card__percent-label', text: ' 일치' })
+    ]),
+    el('p', { class: 'match-card__desc', text: idol.desc || '소개 문구가 아직 없어요.' }),
+    compact ? null : buildBreakdown(details),
+    compact ? null : el('div', { class: 'match-card__tags' },
+      details.flatMap(d => d.tags.map(t => el('span', { class: 'tag', text: `${t.label} ${t.score}` }))))
+  ]);
+
+  return el('article', {
+    class: `match-card ${compact ? 'match-card--sub' : 'match-card--main'} match-card--rank-${rank}`,
+    dataset: { idolId: idol.id }
+  }, [
+    el('div', { class: 'match-card__media' }, [
+      el('span', { class: 'match-card__rank', text: `${rank}위` }),
+      buildImage(idol, 'match-card__image')
+    ]),
+    body
+  ]);
+}
+
+function buildBreakdown(details) {
+  return el('div', { class: 'breakdown' }, details.map(d =>
+    el('div', { class: 'breakdown__row' }, [
+      el('span', { class: 'breakdown__label', text: d.label }),
+      el('div', { class: 'breakdown__track' }, [
+        el('div', { class: 'breakdown__fill', style: `width:${d.score}%` })
+      ]),
+      el('span', { class: 'breakdown__value', text: `${d.score}%` })
+    ])
+  ));
+}
+
+/* 처음 상태로 리셋 (로고 클릭 / 다시 하기 / 관리자 나가기) */
+function resetAll() {
+  if (state.matchTimer) { clearTimeout(state.matchTimer); state.matchTimer = null; }
+  state.isMatching = false;
+  state.selections = {};
+  state.stepIndex = 0;
+  showScreen('main');
+}
+
+/* ==========================================================================
+   9. 관리자 : 로그인 모달
+   ========================================================================== */
+function openLoginModal() {
+  if (state.isAdmin) { enterAdmin(); return; }     // 이미 인증된 세션이면 바로 진입
+  $('#login-form').reset();
+  $('#login-error').textContent = '';
+  $('#modal-login').hidden = false;
+  setTimeout(() => $('#login-password').focus(), 0);
+}
+
+function closeLoginModal() {
+  $('#modal-login').hidden = true;
+}
+
+function handleLogin(e) {
+  e.preventDefault();
+  if ($('#login-password').value === CONFIG.ADMIN_PASSWORD) {
+    state.isAdmin = true;
+    closeLoginModal();
+    enterAdmin();
+  } else {
+    $('#login-error').textContent = '비밀번호가 올바르지 않아요.';
+    $('#login-password').select();
+  }
+}
+
+function enterAdmin() {
+  if (state.matchTimer) { clearTimeout(state.matchTimer); state.matchTimer = null; state.isMatching = false; }
+  renderAdmin();
+  showScreen('admin');
+}
+
+function exitAdmin() {
+  state.isAdmin = false;
+  resetForm();
+  resetAll();
+}
+
+/* ==========================================================================
+   10. 관리자 : 아이돌 CRUD
+   ========================================================================== */
+/* STEPS 설정을 기반으로 점수 입력칸 자동 생성 (1회) */
+function buildScoreInputs() {
+  $('#score-groups').replaceChildren(...STEPS.map(step =>
+    el('fieldset', { class: 'score-group' }, [
+      el('legend', { class: 'score-group__title', text: `${step.label} 태그 점수 (0~100)` }),
+      ...step.options.map(opt =>
+        el('label', { class: 'score-field' }, [
+          el('span', { class: 'score-field__label', text: opt.label }),
+          el('input', {
+            type: 'number', class: 'form-input score-input',
+            min: '0', max: '100', step: '1', placeholder: '랜덤',
+            dataset: { step: step.key, tag: opt.id }
+          })
+        ])
+      )
+    ])
+  ));
+}
+
+function renderAdmin() {
+  if (state.editingId && !state.idols.some(i => i.id === state.editingId)) resetForm();
+  renderAdminStatus();
+  renderAdminList();
+  fillGithubForm();
+}
+
+function renderAdminStatus() {
+  const cfg = GitHubSync.load();
+  let msg;
+
+  if (!cfg) {
+    msg = state.isDefaultData
+      ? '현재 기본 샘플 데이터(랜덤 점수)로 동작 중이에요. 아래 "GitHub 연동 설정"을 저장하면, 관리자에서 저장할 때 저장소 파일도 함께 갱신돼요.'
+      : `이 브라우저의 localStorage에 저장된 아이돌 ${state.idols.length}명을 사용 중이에요. (GitHub 연동 없음 — 이 브라우저에서만 보여요)`;
+  } else {
+    const base = `GitHub(${cfg.owner}/${cfg.repo})와 연동 중 · 아이돌 ${state.idols.length}명`;
+    if (state.githubStatus === 'syncing') msg = `${base} · 저장소에 반영하는 중...`;
+    else if (state.githubStatus === 'error') msg = `${base} · ⚠ ${state.githubError}`;
+    else if (state.githubError) msg = `${base} · ${state.githubError}`;
+    else msg = `${base} · 최신 상태로 동기화됨 (모든 방문자에게 보여요)`;
+  }
+
+  if (state.storageError) msg += ' ⚠ 이 브라우저의 localStorage 백업 저장은 실패했어요.';
+  $('#admin-status').textContent = msg;
+}
+
+function renderAdminList() {
+  const list = $('#admin-list');
+  if (!state.idols.length) {
+    list.replaceChildren(el('li', { class: 'admin__empty', text: '등록된 아이돌이 없어요. "+ 새 아이돌"로 추가해주세요.' }));
+    return;
+  }
+  list.replaceChildren(...state.idols.map(idol =>
+    el('li', { class: 'admin__item' + (idol.id === state.editingId ? ' is-editing' : '') }, [
+      buildImage(idol, 'admin__thumb'),
+      el('span', { class: 'admin__item-name', text: idol.name }),
+      el('button', { type: 'button', class: 'btn btn--ghost btn--sm', text: '수정', onClick: () => startEdit(idol.id) }),
+      el('button', { type: 'button', class: 'btn btn--danger btn--sm', text: '삭제', onClick: () => deleteIdol(idol.id) })
+    ])
+  ));
+}
+
+function resetForm() {
+  state.editingId = null;
+  $('#admin-form').reset();
+  state.formImage = '';
+  renderImagePreview();
+  $('#admin-form-title').textContent = '새 아이돌 추가';
+  $('#admin-form-error').textContent = '';
+  renderAdminList();
+}
+
+function startEdit(id) {
+  const idol = state.idols.find(i => i.id === id);
+  if (!idol) return;
+  state.editingId = id;
+  $('#admin-form-title').textContent = `아이돌 수정: ${idol.name}`;
+  $('#admin-form-error').textContent = '';
+  $('#field-name').value = idol.name;
+  // 업로드 이미지(data:)는 미리보기에만 표시하고, URL 이미지는 입력칸에 채움
+  const isUploaded = idol.image.startsWith('data:');
+  state.formImage = isUploaded ? idol.image : '';
+  $('#field-image').value = isUploaded ? '' : idol.image;
+  renderImagePreview();
+  $('#field-desc').value = idol.desc;
+  $$('.score-input').forEach(inp => {
+    inp.value = idol.scores[inp.dataset.step][inp.dataset.tag];
+  });
+  renderAdminList();
+  $('#admin-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+async function handleIdolSubmit(e) {
+  e.preventDefault();
+  const name = $('#field-name').value.trim();
+  if (!name) {
+    $('#admin-form-error').textContent = '이름을 입력해주세요.';
+    $('#field-name').focus();
+    return;
+  }
+
+  // 점수 수집: 비어 있는 칸은 undefined → normalizeIdol 에서 랜덤 점수로 채워짐
+  const scores = {};
+  $$('.score-input').forEach(inp => {
+    const { step, tag } = inp.dataset;
+    if (!scores[step]) scores[step] = {};
+    scores[step][tag] = inp.value.trim() === '' ? undefined : inp.value;
+  });
+
+  const idol = normalizeIdol({
+    id: state.editingId || genId(),
+    name,
+    image: state.formImage || $('#field-image').value,
+    desc: $('#field-desc').value,
+    scores
+  });
+
+  if (state.editingId) {
+    state.idols = state.idols.map(i => (i.id === state.editingId ? idol : i));
+  } else {
+    state.idols = [...state.idols, idol];
+  }
+
+  await persist();    // 즉시 localStorage 저장 (+ GitHub 연동 시 저장소에도 커밋)
+  resetForm();
+}
+
+async function deleteIdol(id) {
+  const idol = state.idols.find(i => i.id === id);
+  if (!idol || !confirm(`"${idol.name}"을(를) 삭제할까요?`)) return;
+  state.idols = state.idols.filter(i => i.id !== id);
+  await persist();
+  if (state.editingId === id) resetForm(); else renderAdminList();
+}
+
+async function resetToDefault() {
+  const cfg = GitHubSync.load();
+  const warn = cfg
+    ? '저장된 데이터를 지우고 기본 샘플(랜덤 점수)로 되돌릴까요? GitHub와 연동되어 있어서 저장소 파일도 함께 바뀌어요.'
+    : '저장된 데이터를 지우고 기본 샘플(랜덤 점수)로 되돌릴까요?';
+  if (!confirm(warn)) return;
+  Store.clear();
+  state.storageError = false;
+  state.idols = createDefaultIdols();
+  await persist();     // localStorage 갱신 + (연동 시) GitHub에도 기본값 반영
+  resetForm();
+  renderAdmin();
+}
+
+/* --------------------------------------------------------------------------
+   관리자 : 이미지 파일 업로드
+   - 파일을 읽어 CONFIG.IMAGE 크기(4:5)에 맞춰 "cover" 방식으로 잘라낸 뒤 JPEG data URI로 변환
+   - 결과적으로 어떤 크기·비율의 원본이든 카드에 동일한 비율로 들어가고, localStorage 용량도 작게 유지됨
+   -------------------------------------------------------------------------- */
+function fileToFittedDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const objectUrl = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      try {
+        const { WIDTH: W, HEIGHT: H, QUALITY, FOCUS_Y, BG } = CONFIG.IMAGE;
+        const canvas = document.createElement('canvas');
+        canvas.width = W;
+        canvas.height = H;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = BG;                      // 투명 PNG 대비 배경
+        ctx.fillRect(0, 0, W, H);
+
+        // cover: 캔버스를 빈틈없이 덮도록 확대 후, 넘치는 부분은 잘라냄
+        const scale = Math.max(W / img.naturalWidth, H / img.naturalHeight);
+        const sw = W / scale;                    // 원본에서 가져올 영역 크기
+        const sh = H / scale;
+        const sx = (img.naturalWidth - sw) / 2;  // 가로는 중앙 기준
+        const sy = (img.naturalHeight - sh) * FOCUS_Y;  // 세로는 위쪽 기준 (얼굴 보호)
+        ctx.drawImage(img, sx, sy, sw, sh, 0, 0, W, H);
+
+        resolve(canvas.toDataURL('image/jpeg', QUALITY));
+      } catch (err) {
+        reject(err);
+      } finally {
+        URL.revokeObjectURL(objectUrl);
+      }
+    };
+    img.onerror = () => { URL.revokeObjectURL(objectUrl); reject(new Error('image load failed')); };
+    img.src = objectUrl;
+  });
+}
+
+async function handleImageFile(e) {
+  const file = e.target.files && e.target.files[0];
+  e.target.value = '';                           // 같은 파일을 다시 선택해도 change 가 발생하도록 초기화
+  if (!file) return;
+
+  const errBox = $('#admin-form-error');
+  if (!file.type.startsWith('image/')) {
+    errBox.textContent = '이미지 파일(PNG, JPG, WebP)만 올릴 수 있어요.';
+    return;
+  }
+  if (file.size > CONFIG.IMAGE.MAX_FILE_MB * 1024 * 1024) {
+    errBox.textContent = `이미지 용량은 ${CONFIG.IMAGE.MAX_FILE_MB}MB 이하만 올릴 수 있어요.`;
+    return;
+  }
+
+  try {
+    state.formImage = await fileToFittedDataUrl(file);
+    $('#field-image').value = '';                // 파일 업로드가 URL 입력보다 우선
+    errBox.textContent = '';
+    renderImagePreview();
+  } catch (err) {
+    errBox.textContent = '이미지를 읽지 못했어요. 다른 파일로 시도해주세요.';
+  }
+}
+
+/* 미리보기: 업로드 이미지가 있으면 그것, 없으면 URL 입력값 */
+function renderImagePreview() {
+  const src = state.formImage || $('#field-image').value.trim();
+  const img = $('#image-preview-img');
+  const empty = $('#image-preview-empty');
+  empty.textContent = '이미지 없음';
+  if (!src) {
+    img.hidden = true;
+    img.removeAttribute('src');
+    empty.hidden = false;
+    return;
+  }
+  img.hidden = false;
+  empty.hidden = true;
+  img.src = src;
+}
+
+function clearFormImage() {
+  state.formImage = '';
+  $('#field-image').value = '';
+  renderImagePreview();
+}
+
+/* --------------------------------------------------------------------------
+   관리자 : GitHub 연동 설정
+   -------------------------------------------------------------------------- */
+function fillGithubForm() {
+  const cfg = GitHubSync.load() || {};
+  $('#gh-owner').value = cfg.owner || '';
+  $('#gh-repo').value = cfg.repo || '';
+  $('#gh-branch').value = cfg.branch || CONFIG.GITHUB.DEFAULT_BRANCH;
+  $('#gh-path').value = cfg.path || CONFIG.GITHUB.DEFAULT_PATH;
+  $('#gh-token').value = cfg.token || '';
+  $('#gh-error').textContent = '';
+}
+
+async function saveGithubSettings() {
+  const owner = $('#gh-owner').value.trim();
+  const repo = $('#gh-repo').value.trim();
+  const branch = $('#gh-branch').value.trim() || CONFIG.GITHUB.DEFAULT_BRANCH;
+  const path = $('#gh-path').value.trim() || CONFIG.GITHUB.DEFAULT_PATH;
+  const token = $('#gh-token').value.trim();
+  const errBox = $('#gh-error');
+
+  if (!owner || !repo || !token) {
+    errBox.textContent = '저장소 소유자, 저장소 이름, 토큰은 꼭 입력해주세요.';
+    return;
+  }
+
+  const cfg = { owner, repo, branch, path, token };
+  GitHubSync.save(cfg);
+  errBox.textContent = '연결을 확인하는 중...';
+
+  try {
+    await GitHubSync.fetchSha(cfg);     // 토큰 권한 / 저장소 이름 확인용 호출
+    errBox.textContent = '연결 성공! 저장소의 최신 데이터를 불러올게요.';
+    await loadData();
+    renderAdmin();
+  } catch (e) {
+    errBox.textContent = `연결에 실패했어요: ${e.message}`;
+  }
+}
+
+async function testGithubConnection() {
+  const cfg = GitHubSync.load();
+  const errBox = $('#gh-error');
+  if (!cfg) { errBox.textContent = '먼저 설정을 저장해주세요.'; return; }
+  errBox.textContent = '확인하는 중...';
+  try {
+    await GitHubSync.fetchSha(cfg);
+    errBox.textContent = '연결 성공! 저장소 파일에 접근할 수 있어요.';
+  } catch (e) {
+    errBox.textContent = `연결 실패: ${e.message}`;
+  }
+}
+
+function disconnectGithub() {
+  if (!confirm('GitHub 연동을 해제할까요? 이 브라우저의 localStorage 데이터는 그대로 남아요.')) return;
+  GitHubSync.clear();
+  state.githubStatus = 'idle';
+  state.githubError = '';
+  $('#gh-token').value = '';
+  $('#gh-error').textContent = '';
+  renderAdminStatus();
+}
+
+function fillRandomScores() {
+  $$('.score-input').forEach(inp => { inp.value = randomScore(); });
+}
+
+/* ==========================================================================
+   11. 이벤트 바인딩 & 초기화
+   ========================================================================== */
+function bindEvents() {
+  $('#btn-logo').addEventListener('click', resetAll);
+  $('#btn-start').addEventListener('click', startFlow);
+  $('#btn-prev').addEventListener('click', goPrev);
+  $('#btn-next').addEventListener('click', goNext);
+  $('#btn-retry').addEventListener('click', resetAll);
+
+  // 관리자
+  $('#btn-admin-open').addEventListener('click', openLoginModal);
+  $('#login-form').addEventListener('submit', handleLogin);
+  $('#btn-login-cancel').addEventListener('click', closeLoginModal);
+  $('#modal-backdrop').addEventListener('click', closeLoginModal);
+  $('#btn-admin-exit').addEventListener('click', exitAdmin);
+  $('#btn-admin-new').addEventListener('click', resetForm);
+  $('#btn-admin-reset').addEventListener('click', resetToDefault);
+  $('#btn-gh-save').addEventListener('click', saveGithubSettings);
+  $('#btn-gh-test').addEventListener('click', testGithubConnection);
+  $('#btn-gh-disconnect').addEventListener('click', disconnectGithub);
+  $('#admin-form').addEventListener('submit', handleIdolSubmit);
+  $('#btn-form-cancel').addEventListener('click', resetForm);
+  $('#btn-random-fill').addEventListener('click', fillRandomScores);
+
+  // 이미지 업로드 / 미리보기
+  $('#field-image-file').addEventListener('change', handleImageFile);
+  $('#btn-image-clear').addEventListener('click', clearFormImage);
+  $('#field-image').addEventListener('input', () => {   // URL을 직접 입력하면 업로드 이미지는 해제
+    if ($('#field-image').value.trim()) state.formImage = '';
+  });
+  $('#field-image').addEventListener('change', renderImagePreview);
+  $('#image-preview-img').addEventListener('error', () => {   // 잘못된 URL이면 안내
+    $('#image-preview-img').hidden = true;
+    $('#image-preview-empty').textContent = '불러올 수 없어요';
+    $('#image-preview-empty').hidden = false;
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !$('#modal-login').hidden) closeLoginModal();
+  });
+
+  // 다른 탭에서 데이터가 바뀌면 동기화
+  window.addEventListener('storage', async e => {
+    if (e.key !== null && e.key !== CONFIG.STORAGE_KEY && e.key !== CONFIG.GITHUB.STORAGE_KEY) return;
+    await loadData();
+    if (state.screen === 'admin') renderAdmin();
+  });
+}
+
+async function init() {
+  buildScoreInputs();
+  bindEvents();
+  await loadData();
+  showScreen('main');
+}
+
+init();
+
+// 디버깅/QA용 (콘솔에서 window.__chajadol.calcMatch(...) 등으로 확인 가능)
+window.__chajadol = { state, STEPS, CONFIG, calcMatch, computeResults };
+})();
+</script>
+</body>
+</html>
